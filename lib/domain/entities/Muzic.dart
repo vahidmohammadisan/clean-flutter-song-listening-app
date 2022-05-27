@@ -3,9 +3,9 @@ import 'package:equatable/equatable.dart';
 class Muzic extends Equatable {
 
   const Muzic({
-    required this.Name,
-    required this.Signer,
-    required this.Link
+    this.Name,
+    this.Signer,
+    this.Link
   });
 
   final String Name;
@@ -14,6 +14,6 @@ class Muzic extends Equatable {
 
   @override
   // TODO: implement props
-  List<Object?> get props => [Name, Signer, Link];
+  List<Object> get props => [Name, Signer, Link];
 
 }

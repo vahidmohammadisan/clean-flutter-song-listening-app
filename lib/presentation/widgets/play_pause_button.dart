@@ -5,9 +5,9 @@ class PlayPauseButton extends StatelessWidget {
   final VoidCallback onPlay;
 
   const PlayPauseButton({
-    Key? key,
-    required this.isPlaying,
-    required this.onPlay,
+    Key key,
+    this.isPlaying,
+    this.onPlay,
   }) : super(key: key);
 
   @override

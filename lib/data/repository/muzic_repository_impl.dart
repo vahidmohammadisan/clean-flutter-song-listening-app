@@ -10,7 +10,7 @@ import '../exception.dart';
 import '../failure.dart';
 
 class MuzicRepositoryImpl implements MuzicRepository {
-  MuzicRepositoryImpl({required this.remoteDataSource});
+  MuzicRepositoryImpl({this.remoteDataSource});
 
   final RemoteDataSource remoteDataSource;
 

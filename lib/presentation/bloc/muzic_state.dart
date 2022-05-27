@@ -7,7 +7,7 @@ abstract class MuzicState extends Equatable {
   const MuzicState();
 
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [];
 }
 
 class MuzicEmpty extends MuzicState {}
@@ -20,7 +20,7 @@ class MuzicError extends MuzicState {
   const MuzicError(this.message);
 
   @override
-  List<Object?> get props => [message];
+  List<Object> get props => [message];
 }
 
 class MuzicData extends MuzicState {
@@ -29,5 +29,5 @@ class MuzicData extends MuzicState {
   const MuzicData(this.muzic);
 
   @override
-  List<Object?> get props => [muzic];
+  List<Object> get props => [muzic];
 }

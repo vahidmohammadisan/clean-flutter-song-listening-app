@@ -8,8 +8,8 @@ class AudioPlayerWidget extends StatefulWidget {
   final bool isAsset;
 
   const AudioPlayerWidget({
-    Key? key,
-    required this.url,
+    Key key,
+    this.url,
     this.isAsset = false,
   }) : super(key: key);
 
@@ -18,8 +18,8 @@ class AudioPlayerWidget extends StatefulWidget {
 }
 
 class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
-  late AudioPlayer _audioPlayer;
-  late AudioCache _audioCache;
+  AudioPlayer _audioPlayer;
+  AudioCache _audioCache;
 
   PlayerState _playerState = PlayerState.STOPPED;
 

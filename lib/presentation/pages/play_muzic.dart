@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 import '../widgets/audio_player_widget.dart';
 
 class PlayMuzic extends StatelessWidget {
-  PlayMuzic({required this.muzic, this.onPressed});
+  PlayMuzic({this.muzic, this.onPressed});
 
   final Muzic muzic;
   final onPressed;

@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:html/parser.dart' show parse;
 
 class MuzicModel extends Equatable {
-  MuzicModel({required this.Body}) {
+  MuzicModel({this.Body}) {
     parsBody();
   }
 
@@ -31,5 +31,5 @@ class MuzicModel extends Equatable {
 
   @override
   // TODO: implement props
-  List<Object?> get props => [muzicList];
+  List<Object> get props => [muzicList];
 }
