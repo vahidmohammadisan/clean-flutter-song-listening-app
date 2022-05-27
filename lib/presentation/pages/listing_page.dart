@@ -10,10 +10,14 @@ import '../bloc/music_bloc.dart';
 import '../bloc/music_event.dart';
 import '../bloc/music_state.dart';
 
-class ListingPage extends StatelessWidget {
-  ListingPage({this.onPressed});
+class ListingPage extends StatefulWidget {
+  const ListingPage({Key key}) : super(key: key);
 
-  final onPressed;
+  @override
+  State<ListingPage> createState() => _ListingPage();
+}
+
+class _ListingPage extends State<ListingPage> {
   var page = 1;
 
   @override
@@ -125,30 +129,24 @@ class ListingPage extends StatelessWidget {
                         : Column(
                             children: [
                               ListTile(
-                                isThreeLine: true,
                                 onTap: () => Get.to(PlayMusic(
                                     music: state.music.musicList[position])),
                                 dense: false,
-/*                                leading: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  child: Image.network(state
-                                          .events
-                                          .events[position]
-                                          .performers[0]
-                                          .image ??
-                                      'https://montessoriinthewoods.org/wp-content/uploads/2018/02/image-placeholder-500x500.jpg'),
-                                ),*/
                                 title: Text(
                                   state.music.musicList[position].Name
                                       .toString(),
-                                  style: TextStyle(fontWeight: FontWeight.w800),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w800),
                                 ),
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(state.music.musicList[position].Link),
-                                    Text(state.music.musicList[position].Signer
-                                        .toString()),
+                                    Text(
+                                      state.music.musicList[position].Signer
+                                          .toString(),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.w800),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -184,7 +182,36 @@ class ListingPage extends StatelessWidget {
               ),
             );
           }
-        })
+        }),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FloatingActionButton.small(
+              backgroundColor: Colors.amber,
+              onPressed: () {
+                if (page != 1) {
+                  setState(() {
+                    page -= 1;
+                  });
+                }
+                context.read<MusicBloc>().add(GetMusic(page.toString()));
+              },
+              child: const Icon(Icons.arrow_left),
+            ),
+            Text("$page"),
+            FloatingActionButton.small(
+              backgroundColor: Colors.amber,
+              onPressed: () {
+                setState(() {
+                  page += 1;
+                });
+
+                context.read<MusicBloc>().add(GetMusic(page.toString()));
+              },
+              child: const Icon(Icons.arrow_right),
+            )
+          ],
+        )
       ],
     )));
   }
