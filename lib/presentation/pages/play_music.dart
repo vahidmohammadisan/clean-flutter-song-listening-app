@@ -3,17 +3,17 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:audioplayer/audioplayer.dart';
-import 'package:azeri/domain/entities/Muzic.dart';
+import 'package:azeri/domain/entities/Music.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
 
-class PlayMuzic extends StatelessWidget {
-  PlayMuzic({this.muzic, this.onPressed});
+class PlayMusic extends StatelessWidget {
+  PlayMusic({this.music, this.onPressed});
 
-  final Muzic muzic;
+  final Music music;
   final onPressed;
 
   @override
@@ -21,9 +21,9 @@ class PlayMuzic extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber,
-        title: Text(muzic.Name.toString()),
+        title: Text(music.Name.toString()),
       ),
-      body: AudioApp(muzic.Link),
+      body: AudioApp(music.Link),
     );
   }
 }
@@ -45,14 +45,10 @@ class _AudioAppState extends State<AudioApp> {
   _AudioAppState(this.url);
 
   String url;
-
   Duration duration;
   Duration position;
-
   AudioPlayer audioPlayer;
-
   String localFilePath;
-
   PlayerState playerState = PlayerState.stopped;
 
   get isPlaying => playerState == PlayerState.playing;
@@ -64,9 +60,7 @@ class _AudioAppState extends State<AudioApp> {
 
   get positionText =>
       position != null ? position.toString().split('.').first : '';
-
   bool isMuted = false;
-
   StreamSubscription _positionSubscription;
   StreamSubscription _audioPlayerStateSubscription;
 
@@ -178,9 +172,10 @@ class _AudioAppState extends State<AudioApp> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              '',
-              style: textTheme.headline1,
+            const IconButton(
+              iconSize: 200.0,
+              icon: Icon(Icons.audio_file),
+              color: Colors.amber,
             ),
             Material(child: _buildPlayer()),
             if (!kIsWeb)
@@ -191,12 +186,10 @@ class _AudioAppState extends State<AudioApp> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ElevatedButton(
-                      onPressed: () => _loadFile(),
-                      child: Text('Download'),
-                    ),
+                    TextButton(
+                        onPressed: () => _loadFile(), child: Text('Download')),
                     if (localFilePath != null)
-                      ElevatedButton(
+                      TextButton(
                         onPressed: () => _playLocal(),
                         child: Text('play local'),
                       ),
@@ -217,19 +210,19 @@ class _AudioAppState extends State<AudioApp> {
             Row(mainAxisSize: MainAxisSize.min, children: [
               IconButton(
                 onPressed: isPlaying ? null : () => play(),
-                iconSize: 64.0,
+                iconSize: 45.0,
                 icon: Icon(Icons.play_arrow),
                 color: Colors.amber,
               ),
               IconButton(
                 onPressed: isPlaying ? () => pause() : null,
-                iconSize: 64.0,
+                iconSize: 45.0,
                 icon: Icon(Icons.pause),
                 color: Colors.amber,
               ),
               IconButton(
                 onPressed: isPlaying || isPaused ? () => stop() : null,
-                iconSize: 64.0,
+                iconSize: 45.0,
                 icon: Icon(Icons.stop),
                 color: Colors.amber,
               ),
@@ -275,19 +268,19 @@ class _AudioAppState extends State<AudioApp> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
         if (!isMuted)
-          ElevatedButton.icon(
+          TextButton.icon(
             onPressed: () => mute(true),
             icon: const Icon(
               Icons.headset_off,
               color: Colors.amber,
             ),
-            label: const Text('Mute', style: TextStyle(color: Colors.white)),
+            label: const Text('Mute', style: TextStyle(color: Colors.amber)),
           ),
         if (isMuted)
-          ElevatedButton.icon(
+          TextButton.icon(
             onPressed: () => mute(false),
             icon: const Icon(Icons.headset, color: Colors.amber),
-            label: const Text('Unmute', style: TextStyle(color: Colors.white)),
+            label: const Text('Unmute', style: TextStyle(color: Colors.amber)),
           ),
       ],
     );

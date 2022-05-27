@@ -1,14 +1,14 @@
-import 'package:azeri/domain/entities/Muzic.dart';
+import 'package:azeri/domain/entities/Music.dart';
 import 'package:equatable/equatable.dart';
 import 'package:html/parser.dart' show parse;
 
-class MuzicModel extends Equatable {
-  MuzicModel({this.Body}) {
+class MusicModel extends Equatable {
+  MusicModel({this.Body}) {
     parsBody();
   }
 
   final String Body;
-  final List<Muzic> muzicList = <Muzic>[];
+  final List<Music> musicList = <Music>[];
 
   void parsBody() {
     var document = parse(Body);
@@ -22,7 +22,7 @@ class MuzicModel extends Equatable {
       var signer = top_song.getElementsByClassName("top-song-author")[0];
       var name = top_song.getElementsByClassName("top-song-song")[0];
 
-      muzicList.add(Muzic(
+      musicList.add(Music(
           Name: name.text,
           Signer: signer.text,
           Link: link.attributes["rel"].toString()));
@@ -31,5 +31,5 @@ class MuzicModel extends Equatable {
 
   @override
   // TODO: implement props
-  List<Object> get props => [muzicList];
+  List<Object> get props => [musicList];
 }

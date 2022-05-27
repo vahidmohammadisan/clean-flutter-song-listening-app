@@ -1,16 +1,16 @@
 import 'package:equatable/equatable.dart';
 
-abstract class MuzicEvent extends Equatable {
-  const MuzicEvent();
+abstract class MusicEvent extends Equatable {
+  const MusicEvent();
 
   @override
   List<Object> get props => [];
 }
 
-class GetMuzic extends MuzicEvent {
+class GetMusic extends MusicEvent {
   final String page;
 
-  const GetMuzic(this.page);
+  const GetMusic(this.page);
 
   @override
   List<Object> get props => [page];

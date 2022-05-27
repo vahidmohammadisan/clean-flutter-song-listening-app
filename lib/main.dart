@@ -1,4 +1,4 @@
-import 'package:azeri/presentation/bloc/muzic_bloc.dart';
+import 'package:azeri/presentation/bloc/music_bloc.dart';
 import 'package:azeri/presentation/pages/listing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (_) => di.locator<MuzicBloc>(),
+            create: (_) => di.locator<MusicBloc>(),
           )
         ],
         child: GetMaterialApp(

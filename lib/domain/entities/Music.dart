@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 
-class Muzic extends Equatable {
+class Music extends Equatable {
 
-  const Muzic({
+  const Music({
     this.Name,
     this.Signer,
     this.Link

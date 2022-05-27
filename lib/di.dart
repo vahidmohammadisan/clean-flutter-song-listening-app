@@ -1,25 +1,25 @@
-import 'package:azeri/domain/repository/MuzicRepository.dart';
+import 'package:azeri/domain/repository/MusicRepository.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 
-import 'data/datasource/muzic_remote_datasource.dart';
-import 'data/repository/muzic_repository_impl.dart';
-import 'domain/use_case/GetMuzicUseCase.dart';
-import 'presentation/bloc/muzic_bloc.dart';
+import 'data/datasource/music_remote_datasource.dart';
+import 'data/repository/music_repository_impl.dart';
+import 'domain/use_case/GetMusicUseCase.dart';
+import 'presentation/bloc/music_bloc.dart';
 
 final locator = GetIt.instance;
 
 void init() {
   // bloc
-  locator.registerFactory<MuzicBloc>(() => MuzicBloc(locator()));
+  locator.registerFactory<MusicBloc>(() => MusicBloc(locator()));
 
   //usecase
   locator
-      .registerLazySingleton<GetMuzicUseCase>(() => GetMuzicUseCase(locator()));
+      .registerLazySingleton<GetMusicUseCase>(() => GetMusicUseCase(locator()));
 
   //repository
-  locator.registerLazySingleton<MuzicRepository>(
-      () => MuzicRepositoryImpl(remoteDataSource: locator()));
+  locator.registerLazySingleton<MusicRepository>(
+      () => MusicRepositoryImpl(remoteDataSource: locator()));
 
   //data source
   locator.registerLazySingleton<RemoteDataSource>(() => RemoteDataSourceImpl());
