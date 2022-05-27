@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:share/share.dart';
 
 class PlayMusic extends StatelessWidget {
   PlayMusic({this.music, this.onPressed});
@@ -18,17 +19,13 @@ class PlayMusic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.amber,
-        title: Text(music.Name.split("Yeni")[0]),
-      ),
-      body: AudioApp(music),
-    );
+    return AudioApp(music);
   }
 }
 
 enum PlayerState { stopped, playing, paused }
+
+enum DownloadState { Downloaded, Downloading, Download }
 
 typedef void OnError(Exception exception);
 
@@ -49,12 +46,17 @@ class _AudioAppState extends State<AudioApp> {
   Duration position;
   AudioPlayer audioPlayer;
   String localFilePath;
-  var isDownloaded = false;
   PlayerState playerState = PlayerState.stopped;
 
   get isPlaying => playerState == PlayerState.playing;
 
   get isPaused => playerState == PlayerState.paused;
+
+  DownloadState downloadState = DownloadState.Download;
+
+  get isDownloaded => downloadState == DownloadState.Downloaded;
+
+  get isDownloading => downloadState == DownloadState.Downloading;
 
   get durationText =>
       duration != null ? duration.toString().split('.').first : '';
@@ -144,7 +146,7 @@ class _AudioAppState extends State<AudioApp> {
     final file = File('${dir.path}/${music.Name}.mp3');
     if (await file.exists()) {
       setState(() {
-        isDownloaded = true;
+        downloadState = DownloadState.Downloaded;
       });
       setState(() {
         localFilePath = file.path;
@@ -181,7 +183,7 @@ class _AudioAppState extends State<AudioApp> {
         localFilePath = file.path;
       });
       setState(() {
-        isDownloaded = true;
+        downloadState = DownloadState.Downloaded;
       });
     }
   }
@@ -189,43 +191,71 @@ class _AudioAppState extends State<AudioApp> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Center(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.min,
-          children: [
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.amber,
+          title: Text('${music.Name.split("Yeni")[0]}\n ${music.Signer}'),
+          actions: [
             IconButton(
-                iconSize: 200.0,
-                icon: Icon(
-                  Icons.audio_file,
-                  color: (isDownloaded) ? Colors.amber : Colors.grey,
-                )),
-            Material(child: _buildPlayer()),
-            //if (!kIsWeb)
-            //  localFilePath != null ? Text(localFilePath) : Container(),
-            if (!kIsWeb)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    TextButton(
-                      onPressed: () => _loadFile(),
-                      child: Text(
-                        isDownloaded
-                            ? "This audio has Downloaded."
-                            : "Download and save, if you want...",
-                        style: const TextStyle(fontSize: 17),
-                      ),
-                    ),
-                  ],
-                ),
+              iconSize: 22.0,
+              icon: const Icon(
+                Icons.share,
+                color: Colors.white,
               ),
+              onPressed: () {
+                if (localFilePath != null) {
+                  Share.shareFiles([localFilePath], text: music.Name);
+                } else {
+                  Share.share(music.Link, subject: music.Name);
+                }
+              },
+            )
           ],
         ),
-      ),
-    );
+        body: Center(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              // mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                    iconSize: 200.0,
+                    icon: Icon(
+                      Icons.audio_file,
+                      color: (isDownloaded) ? Colors.amber : Colors.grey,
+                    )),
+                Material(child: _buildPlayer()),
+                //if (!kIsWeb)
+                //  localFilePath != null ? Text(localFilePath) : Container(),
+                if (!kIsWeb)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            _loadFile();
+                            setState(() {
+                              downloadState = DownloadState.Downloading;
+                            });
+                          },
+                          child: Text(
+                            isDownloaded
+                                ? "This audio has Downloaded."
+                                : isDownloading
+                                    ? "Downloading ... "
+                                    : "Download and save, if you want...",
+                            style: const TextStyle(fontSize: 15),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ));
   }
 
   Widget _buildPlayer() => Container(

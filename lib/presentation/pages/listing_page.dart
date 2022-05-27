@@ -123,9 +123,7 @@ class _ListingPage extends State<ListingPage> {
                   itemCount: state.music.musicList.length,
                   itemBuilder: (context, position) {
                     return state.music.musicList.isEmpty
-                        ? const Center(
-                            child: Text('Oops!, No '
-                                'Result Found.'))
+                        ? const Center(child: Text('Oops!, No Result Found.'))
                         : Column(
                             children: [
                               ListTile(
@@ -194,7 +192,9 @@ class _ListingPage extends State<ListingPage> {
           }
         }),
         Row(
+          verticalDirection: VerticalDirection.down,
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             FloatingActionButton.small(
               backgroundColor: Colors.amber,
