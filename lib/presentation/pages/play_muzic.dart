@@ -281,9 +281,6 @@ class _AudioAppState extends State<AudioApp> {
               Icons.headset_off,
               color: Colors.amber,
             ),
-            style: ButtonStyle(
-              backgroundColor: Colors.amber
-            ),
             label: const Text('Mute', style: TextStyle(color: Colors.white)),
           ),
         if (isMuted)
