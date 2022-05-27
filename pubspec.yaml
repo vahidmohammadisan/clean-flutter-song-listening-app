@@ -47,8 +47,8 @@ dependencies:
   loading_animation_widget: ^1.2.0+1
   html: ^0.15.0
   audio_service: ^0.18.4
-  audioplayers: ^0.19.0
-  audioplayer: ^0.8.1
+  audioplayer: 0.8.1
+  audioplayer_web: 0.7.1
 
 dev_dependencies:
   flutter_test:

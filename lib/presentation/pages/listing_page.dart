@@ -129,11 +129,21 @@ class _ListingPage extends State<ListingPage> {
                         : Column(
                             children: [
                               ListTile(
+                                leading: const Icon(Icons.audiotrack_rounded,
+                                    color: Colors.amber, size: 25),
+                                // trailing: Row(
+                                //     mainAxisSize: MainAxisSize.min,
+                                //     children: const <Widget>[
+                                //       Icon(
+                                //         Icons.share,
+                                //       ),
+                                //     ]),
                                 onTap: () => Get.to(PlayMusic(
                                     music: state.music.musicList[position])),
                                 dense: false,
                                 title: Text(
                                   state.music.musicList[position].Name
+                                      .split("Yeni")[0]
                                       .toString(),
                                   style: const TextStyle(
                                       fontWeight: FontWeight.w800),
@@ -198,14 +208,19 @@ class _ListingPage extends State<ListingPage> {
               },
               child: const Icon(Icons.arrow_left),
             ),
+            const SizedBox(
+              width: 10,
+            ),
             Text("$page"),
+            const SizedBox(
+              width: 10,
+            ),
             FloatingActionButton.small(
               backgroundColor: Colors.amber,
               onPressed: () {
                 setState(() {
                   page += 1;
                 });
-
                 context.read<MusicBloc>().add(GetMusic(page.toString()));
               },
               child: const Icon(Icons.arrow_right),

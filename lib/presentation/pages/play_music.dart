@@ -21,9 +21,9 @@ class PlayMusic extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber,
-        title: Text(music.Name.toString()),
+        title: Text(music.Name.split("Yeni")[0]),
       ),
-      body: AudioApp(music.Link),
+      body: AudioApp(music),
     );
   }
 }
@@ -33,22 +33,23 @@ enum PlayerState { stopped, playing, paused }
 typedef void OnError(Exception exception);
 
 class AudioApp extends StatefulWidget {
-  AudioApp(this.url);
+  AudioApp(this.music);
 
-  String url;
+  Music music;
 
   @override
-  _AudioAppState createState() => _AudioAppState(url);
+  _AudioAppState createState() => _AudioAppState(music);
 }
 
 class _AudioAppState extends State<AudioApp> {
-  _AudioAppState(this.url);
+  _AudioAppState(this.music);
 
-  String url;
+  Music music;
   Duration duration;
   Duration position;
   AudioPlayer audioPlayer;
   String localFilePath;
+  var isDownloaded = false;
   PlayerState playerState = PlayerState.stopped;
 
   get isPlaying => playerState == PlayerState.playing;
@@ -99,13 +100,18 @@ class _AudioAppState extends State<AudioApp> {
         position = Duration(seconds: 0);
       });
     });
+    if (!kIsWeb) checkFileIsExist();
   }
 
   Future play() async {
-    await audioPlayer.play(url);
-    setState(() {
-      playerState = PlayerState.playing;
-    });
+    if (!kIsWeb && isDownloaded) {
+      _playLocal();
+    } else {
+      await audioPlayer.play(music.Link);
+      setState(() {
+        playerState = PlayerState.playing;
+      });
+    }
   }
 
   Future _playLocal() async {
@@ -133,6 +139,19 @@ class _AudioAppState extends State<AudioApp> {
     });
   }
 
+  Future checkFileIsExist() async {
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/${music.Name}.mp3');
+    if (await file.exists()) {
+      setState(() {
+        isDownloaded = true;
+      });
+      setState(() {
+        localFilePath = file.path;
+      });
+    }
+  }
+
   void onComplete() {
     setState(() => playerState = PlayerState.stopped);
   }
@@ -148,17 +167,21 @@ class _AudioAppState extends State<AudioApp> {
   }
 
   Future _loadFile() async {
-    final bytes = await _loadFileBytes(url,
+    if (!kIsWeb && isDownloaded) return;
+    final bytes = await _loadFileBytes(music.Link,
         onError: (Exception exception) =>
             print('_loadFile => exception $exception'));
 
     final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/audio.mp3');
+    final file = File('${dir.path}/${music.Name}.mp3');
 
     await file.writeAsBytes(bytes);
     if (await file.exists()) {
       setState(() {
         localFilePath = file.path;
+      });
+      setState(() {
+        isDownloaded = true;
       });
     }
   }
@@ -172,14 +195,15 @@ class _AudioAppState extends State<AudioApp> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const IconButton(
-              iconSize: 200.0,
-              icon: Icon(Icons.audio_file),
-              color: Colors.amber,
-            ),
+            IconButton(
+                iconSize: 200.0,
+                icon: Icon(
+                  Icons.audio_file,
+                  color: (isDownloaded) ? Colors.amber : Colors.grey,
+                )),
             Material(child: _buildPlayer()),
-            if (!kIsWeb)
-              localFilePath != null ? Text(localFilePath) : Container(),
+            //if (!kIsWeb)
+            //  localFilePath != null ? Text(localFilePath) : Container(),
             if (!kIsWeb)
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -187,12 +211,14 @@ class _AudioAppState extends State<AudioApp> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     TextButton(
-                        onPressed: () => _loadFile(), child: Text('Download')),
-                    if (localFilePath != null)
-                      TextButton(
-                        onPressed: () => _playLocal(),
-                        child: Text('play local'),
+                      onPressed: () => _loadFile(),
+                      child: Text(
+                        isDownloaded
+                            ? "This audio has Downloaded."
+                            : "Download and save, if you want...",
+                        style: const TextStyle(fontSize: 17),
                       ),
+                    ),
                   ],
                 ),
               ),
