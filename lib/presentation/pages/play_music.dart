@@ -224,7 +224,14 @@ class _AudioAppState extends State<AudioApp> {
                       Icons.audio_file,
                       color: (isDownloaded) ? Colors.amber : Colors.grey,
                     )),
-                Material(child: _buildPlayer()),
+                Card(
+                    elevation: 40,
+                    shadowColor: Colors.amber,
+                    margin: const EdgeInsets.all(20),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: Material(child: _buildPlayer())),
                 //if (!kIsWeb)
                 //  localFilePath != null ? Text(localFilePath) : Container(),
                 if (!kIsWeb)

@@ -87,7 +87,7 @@ class _ListingPage extends State<ListingPage> {
             ),
           ),
           actions: [
-            PopupMenuButton(
+            /*PopupMenuButton(
                 // add icon, by default "3 dot" icon
                 // icon: Icon(Icons.book)
                 itemBuilder: (context) {
@@ -109,7 +109,7 @@ class _ListingPage extends State<ListingPage> {
               if (value == 0) {
               } else if (value == 1) {
               } else if (value == 2) {}
-            }),
+            }),*/
           ],
         ),
         BlocBuilder<MusicBloc, MusicState>(builder: (context, state) {
@@ -191,41 +191,44 @@ class _ListingPage extends State<ListingPage> {
             );
           }
         }),
-        Row(
-          verticalDirection: VerticalDirection.down,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            FloatingActionButton.small(
-              backgroundColor: Colors.amber,
-              onPressed: () {
-                if (page != 1) {
+        Card(
+          elevation: 20,
+          shadowColor: Colors.amber,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              FloatingActionButton.small(
+                backgroundColor: Colors.amber,
+                onPressed: () {
+                  if (page != 1) {
+                    setState(() {
+                      page -= 1;
+                    });
+                  }
+                  context.read<MusicBloc>().add(GetMusic(page.toString()));
+                },
+                child: const Icon(Icons.arrow_left),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              Text("$page"),
+              const SizedBox(
+                width: 10,
+              ),
+              FloatingActionButton.small(
+                backgroundColor: Colors.amber,
+                onPressed: () {
                   setState(() {
-                    page -= 1;
+                    page += 1;
                   });
-                }
-                context.read<MusicBloc>().add(GetMusic(page.toString()));
-              },
-              child: const Icon(Icons.arrow_left),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Text("$page"),
-            const SizedBox(
-              width: 10,
-            ),
-            FloatingActionButton.small(
-              backgroundColor: Colors.amber,
-              onPressed: () {
-                setState(() {
-                  page += 1;
-                });
-                context.read<MusicBloc>().add(GetMusic(page.toString()));
-              },
-              child: const Icon(Icons.arrow_right),
-            )
-          ],
+                  context.read<MusicBloc>().add(GetMusic(page.toString()));
+                },
+                child: const Icon(Icons.arrow_right),
+              )
+            ],
+          ),
         )
       ],
     )));
