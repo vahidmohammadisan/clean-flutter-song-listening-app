@@ -1,6 +1,6 @@
 # azeri
 
-A Flutter app for listen mp3 with bloC , Get it , clean architecture.
+A Flutter app for listen mp3 (bloC , Get it , clean architecture).
 
 
 |     |      |
