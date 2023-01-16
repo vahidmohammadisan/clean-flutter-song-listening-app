@@ -1,6 +1,6 @@
 # azeri
 
-![google play](https://play.google.com/store/apps/details?id=ir.vahidmohammadisan.azeri)
+https://play.google.com/store/apps/details?id=ir.vahidmohammadisan.azeri
 
 A Flutter app for listen mp3 (bloC , Get it , clean architecture).
 
